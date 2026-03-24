@@ -38,7 +38,12 @@ matchMedia.add("(min-width: 992px)", () => {
 
 // <!-- NEXT PARTICLE  -->
 
-document.addEventListener("DOMContentLoaded", function() {
+function onReady(fn) {
+  if (document.readyState !== 'loading') { fn(); }
+  else { document.addEventListener('DOMContentLoaded', fn); }
+}
+
+onReady(function() {
   const container = document.getElementById('particle-container');
   const image = document.getElementById('particle-img');
 
