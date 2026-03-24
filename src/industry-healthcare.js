@@ -105,29 +105,29 @@ const swiperHowWeHelp = new Swiper('[swiper="howWeHelp"] .swiper', {
   }
 })
 
-// const swiperNews = new Swiper('[swiper="news"] .swiper', {
-//   speed: 700,
-//   slidesPerView: 'auto',
-//   spaceBetween: 0,
-//   grabCursor: true,
-//   pagination: {
-//     el: '.news-pagination',
-//     clickable: true,
-//     bulletClass: 'news-bullet', 
-//     bulletActiveClass: 'active'
-//   },
-//   navigation: {
-//     nextEl: '[swiper="news"] .swiper-button.next',
-//     prevEl: '[swiper="news"] .swiper-button.prev'
-//   },
-// })
+const swiperNews = new Swiper('[swiper="news"] .swiper', {
+  speed: 700,
+  slidesPerView: 'auto',
+  spaceBetween: 0,
+  grabCursor: true,
+  pagination: {
+    el: '.news-pagination',
+    clickable: true,
+    bulletClass: 'news-bullet', 
+    bulletActiveClass: 'active'
+  },
+  navigation: {
+    nextEl: '[swiper="news"] .swiper-button.next',
+    prevEl: '[swiper="news"] .swiper-button.prev'
+  },
+})
 
-// let resizeTimeout;
+let resizeTimeout;
 
-// window.addEventListener('resize', () => {
-//   clearTimeout(resizeTimeout);
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
 
-//   resizeTimeout = setTimeout(() => {
-//     swiper.update();
-//   }, 150);
-// });
+  resizeTimeout = setTimeout(() => {
+    swiper.update();
+  }, 150);
+});
