@@ -1,0 +1,59 @@
+<!-- ================================================================
+  ZIOS — Global Loader
+  Webflow: Project Settings → Custom Code → Footer Code
+  ================================================================
+  Що робить:
+  1. Визначає dev (localhost) або prod (jsDelivr) — один раз на всіх сторінках
+  2. Завантажує глобальні скрипти (потрібні на кожній сторінці)
+  3. Виставляє window.zios.load() для сторінкових сніппетів
+  ================================================================ -->
+<script>
+window.__ziosReady = (async function () {
+  const DEV = 'http://localhost:5173';
+  const CDN = 'https://cdn.jsdelivr.net/gh/ndrewfrolov/zios-nextparticle@main';
+
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      var el = document.createElement('script');
+      el.src = src;
+      el.onload = res;
+      el.onerror = rej;
+      document.head.appendChild(el);
+    });
+  }
+
+  async function isDevRunning() {
+    try {
+      var ctrl = new AbortController();
+      setTimeout(function () { ctrl.abort(); }, 500);
+      await fetch(DEV + '/', { mode: 'no-cors', cache: 'no-store', signal: ctrl.signal });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var dev  = await isDevRunning();
+  var base = dev ? DEV : CDN;
+
+  console.log('[Zios] ' + (dev ? '⚡ localhost (dev)' : '🚀 jsDelivr (prod)') + ' → ' + base);
+
+  // API доступна для сторінкових сніппетів після await window.__ziosReady
+  window.zios = {
+    base: base,
+    load: function () {
+      var scripts = Array.from(arguments);
+      return scripts.reduce(function (chain, src) {
+        return chain.then(function () { return loadScript(base + '/' + src); });
+      }, Promise.resolve());
+    }
+  };
+
+  // ── Глобальні скрипти (кожна сторінка) ──────────────────────────
+  await window.zios.load(
+    'nextparticle.min.js'
+  );
+  // ────────────────────────────────────────────────────────────────
+
+})();
+</script>
